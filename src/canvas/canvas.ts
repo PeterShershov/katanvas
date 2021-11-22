@@ -1,5 +1,4 @@
-import type { PolyLine } from '.';
-import type { Circle, Rect, ShapeStyleProperties } from './types';
+import type { Circle, PolyLine, Rect, ShapeStyleProperties } from './types';
 
 export class Canvas {
     private canvasElement: HTMLCanvasElement | null = null;
