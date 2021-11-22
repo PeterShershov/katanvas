@@ -21,7 +21,7 @@ export class Canvas {
         parentElement.appendChild(this.canvasElement);
     }
 
-    public clearRect() {
+    public clearRect(): void {
         if (this.canvasElement) {
             this.context!.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
         }
@@ -47,11 +47,11 @@ export class Canvas {
         });
     }
 
-    public clean() {
+    public clean(): void {
         this.canvasElement?.remove();
     }
 
-    public drawShape({ strokeColor, backgroundColor, lineWidth }: ShapeStyleProperties, shape: () => void) {
+    public drawShape({ strokeColor, backgroundColor, lineWidth }: ShapeStyleProperties, shape: () => void): void {
         requestAnimationFrame(() => {
             if (this.context) {
                 this.context.beginPath();
@@ -81,13 +81,13 @@ export class Canvas {
         radius,
         startAngle = 0,
         endAngle = 2 * Math.PI,
-    }: Circle) {
+    }: Circle): void {
         this.drawShape({ backgroundColor, lineWidth, strokeColor }, () =>
             this.context?.arc(x, y, radius, startAngle, endAngle)
         );
     }
 
-    public rect({ x, y, width, height, backgroundColor = '', strokeColor = '', lineWidth = 0 }: Rect) {
+    public rect({ x, y, width, height, backgroundColor = '', strokeColor = '', lineWidth = 0 }: Rect): void {
         this.drawShape({ backgroundColor, lineWidth, strokeColor }, () => this.context?.rect(x, y, width, height));
     }
 }
