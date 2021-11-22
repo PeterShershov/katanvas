@@ -107,8 +107,11 @@ export class Canvas {
                     this.context.lineTo(x, y);
                 }
 
+                if (backgroundColor) {
+                    this.context.fill();
+                }
+
                 this.context.stroke();
-                this.context.fill();
                 this.context.closePath();
             }
         });
