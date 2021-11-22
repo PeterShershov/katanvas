@@ -1,6 +1,6 @@
 {
   "name": "katanvas",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A simple abstraction for canvas API",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -10,13 +10,15 @@
     "watch": "parcel watch",
     "build": "parcel build"
   },
-  "keywords": [],
+  "keywords": [
+    "canvas"
+  ],
   "author": "Peter Shershov",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^8.1.0",
-    "parcel": "^2.0.0",
+    "eslint": "^8.3.0",
+    "parcel": "^2.0.1",
     "prettier": "^2.4.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   }
 }
