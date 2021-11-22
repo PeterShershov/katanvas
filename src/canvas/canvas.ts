@@ -32,7 +32,7 @@ export class Canvas {
     }
 
     public getContext(): CanvasRenderingContext2D | null {
-        return this.canvasElement?.getContext('2d') || null;
+        return this.canvasElement?.getContext('2d', { alpha: false }) || null;
     }
 
     public resizeToFullScreen(): void {
