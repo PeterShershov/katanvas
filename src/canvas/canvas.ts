@@ -1,3 +1,4 @@
+import type { PolyLine } from '.';
 import type { Circle, Rect, ShapeStyleProperties } from './types';
 
 export class Canvas {
@@ -51,21 +52,23 @@ export class Canvas {
         this.canvasElement?.remove();
     }
 
-    public drawShape({ strokeColor, backgroundColor, lineWidth }: ShapeStyleProperties, shape: () => void): void {
+    public drawShape(
+        { strokeColor = '', backgroundColor = '', lineWidth = 0 }: ShapeStyleProperties,
+        shape: () => void
+    ): void {
         requestAnimationFrame(() => {
             if (this.context) {
                 this.context.beginPath();
-                if (backgroundColor) {
-                    this.context.fillStyle = backgroundColor;
-                }
+                this.context.fillStyle = backgroundColor;
+                this.context.lineWidth = lineWidth;
+                this.context.strokeStyle = strokeColor;
 
                 if (strokeColor && lineWidth) {
-                    this.context.lineWidth = lineWidth;
-                    this.context.strokeStyle = strokeColor;
                     this.context.stroke();
                 }
 
                 shape();
+
                 this.context.fill();
                 this.context.closePath();
             }
@@ -89,5 +92,26 @@ export class Canvas {
 
     public rect({ x, y, width, height, backgroundColor = '', strokeColor = '', lineWidth = 0 }: Rect): void {
         this.drawShape({ backgroundColor, lineWidth, strokeColor }, () => this.context?.rect(x, y, width, height));
+    }
+
+    public polyLine({ lines, startPosition, lineWidth = 1, strokeColor = 'black', backgroundColor = '' }: PolyLine) {
+        requestAnimationFrame(() => {
+            if (this.context) {
+                this.context.beginPath();
+                this.context.fillStyle = backgroundColor;
+                this.context.strokeStyle = strokeColor;
+                this.context.lineWidth = lineWidth;
+
+                this.context.moveTo(startPosition.x, startPosition.y);
+
+                for (const { x, y } of lines) {
+                    this.context.lineTo(x, y);
+                }
+
+                this.context.stroke();
+                this.context.fill();
+                this.context.closePath();
+            }
+        });
     }
 }

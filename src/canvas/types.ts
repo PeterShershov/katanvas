@@ -18,3 +18,13 @@ export interface Rect extends ShapeStyleProperties {
     x: number;
     y: number;
 }
+
+export interface Point {
+    x: number;
+    y: number;
+}
+
+export interface PolyLine extends ShapeStyleProperties {
+    startPosition: Point;
+    lines: Point[];
+}
