@@ -2,7 +2,7 @@ import type { Circle, PolyLine, Rect, ShapeStyleProperties } from './types';
 
 export class Canvas {
     private canvasElement: HTMLCanvasElement | null = null;
-    private context = this.canvasElement?.getContext('2d');
+    private context: CanvasRenderingContext2D | null = null;
 
     public create({
         parentElement = document.body,
@@ -17,7 +17,7 @@ export class Canvas {
         this.canvasElement.width = width;
         this.canvasElement.height = height;
 
-        this.context = this.canvasElement.getContext('2d');
+        this.context = this.canvasElement.getContext('2d', { alpha: false });
         parentElement.appendChild(this.canvasElement);
     }
 
@@ -32,7 +32,7 @@ export class Canvas {
     }
 
     public getContext(): CanvasRenderingContext2D | null {
-        return this.canvasElement?.getContext('2d', { alpha: false }) || null;
+        return this.context;
     }
 
     public resizeToFullScreen(): void {
