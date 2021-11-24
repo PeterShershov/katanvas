@@ -1,9 +1,11 @@
+import { checkCanvasEntities } from '../utils';
 import type { Circle, PolyLine, Rect, ShapeStyleProperties } from './types';
 
 export class Canvas {
-    private canvasElement: HTMLCanvasElement | null = null;
-    private context: CanvasRenderingContext2D | null = null;
-
+    private entities: { element: HTMLCanvasElement | null; context: CanvasRenderingContext2D | null } = {
+        element: null,
+        context: null,
+    };
     public create({
         parentElement = document.body,
         width,
@@ -13,43 +15,45 @@ export class Canvas {
         height: number;
         width: number;
     }): void {
-        this.canvasElement = document.createElement('canvas');
-        this.canvasElement.width = width;
-        this.canvasElement.height = height;
+        this.entities.element = document.createElement('canvas');
+        this.entities.context = this.entities.element.getContext('2d', { alpha: false });
 
-        this.context = this.canvasElement.getContext('2d', { alpha: false });
+        this.entities.element.width = width;
+        this.entities.element.height = height;
 
-        parentElement.appendChild(this.canvasElement);
+        parentElement.appendChild(this.entities.element);
     }
 
-    public clearRect(): void {
-        if (this.canvasElement) {
-            this.context!.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+    public clearCanvas(): void {
+        if (checkCanvasEntities(this.entities)) {
+            this.entities.context.clearRect(0, 0, this.entities.element.width, this.entities.element.height);
         }
     }
 
     public get(): HTMLCanvasElement | null {
-        return this.canvasElement;
+        return this.entities.element;
     }
 
     public getContext(): CanvasRenderingContext2D | null {
-        return this.context;
+        return this.entities.context;
     }
 
     public resizeToFullScreen(): void {
         requestAnimationFrame(() => {
-            if (this.canvasElement) {
-                this.canvasElement.style.width = window.innerWidth + 'px';
-                this.canvasElement.style.height = window.innerHeight + 'px';
-                this.canvasElement.width = window.innerWidth * window.devicePixelRatio;
-                this.canvasElement.height = window.innerHeight * window.devicePixelRatio;
-                this.context?.scale(window.devicePixelRatio, window.devicePixelRatio);
+            if (checkCanvasEntities(this.entities)) {
+                this.entities.element.style.width = window.innerWidth + 'px';
+                this.entities.element.style.height = window.innerHeight + 'px';
+                this.entities.element.width = window.innerWidth * window.devicePixelRatio;
+                this.entities.element.height = window.innerHeight * window.devicePixelRatio;
+                this.entities.context?.scale(window.devicePixelRatio, window.devicePixelRatio);
             }
         });
     }
 
     public clean(): void {
-        this.canvasElement?.remove();
+        if (checkCanvasEntities(this.entities)) {
+            this.entities.element.remove();
+        }
     }
 
     public drawShape(
@@ -57,19 +61,19 @@ export class Canvas {
         shape: () => void
     ): void {
         requestAnimationFrame(() => {
-            if (this.context) {
-                this.context.beginPath();
-                this.context.fillStyle = backgroundColor;
-                this.context.lineWidth = lineWidth;
-                this.context.strokeStyle = strokeColor;
+            if (checkCanvasEntities(this.entities)) {
+                this.entities.context.beginPath();
+                this.entities.context.fillStyle = backgroundColor;
+                this.entities.context.lineWidth = lineWidth;
+                this.entities.context.strokeStyle = strokeColor;
                 shape();
 
                 if (strokeColor || lineWidth) {
-                    this.context.stroke();
+                    this.entities.context.stroke();
                 }
 
-                this.context.fill();
-                this.context.closePath();
+                this.entities.context.fill();
+                this.entities.context.closePath();
             }
         });
     }
@@ -85,34 +89,50 @@ export class Canvas {
         endAngle = 2 * Math.PI,
     }: Circle): void {
         this.drawShape({ backgroundColor, lineWidth, strokeColor }, () =>
-            this.context?.arc(x, y, radius, startAngle, endAngle)
+            this.entities.context?.arc(x, y, radius, startAngle, endAngle)
         );
     }
 
+    set fillCanvas(color: string) {
+        if (!this.entities.element) {
+            throw new Error('canvas element was not rendered, run create()');
+        }
+
+        this.rect({
+            x: 0,
+            y: 0,
+            width: this.entities.element.width,
+            height: this.entities.element.height,
+            backgroundColor: color,
+        });
+    }
+
     public rect({ x, y, width, height, backgroundColor = '', strokeColor = '', lineWidth = 0 }: Rect): void {
-        this.drawShape({ backgroundColor, lineWidth, strokeColor }, () => this.context?.rect(x, y, width, height));
+        this.drawShape({ backgroundColor, lineWidth, strokeColor }, () =>
+            this.entities.context!.rect(x, y, width, height)
+        );
     }
 
     public polyLine({ lines, startPosition, lineWidth = 1, strokeColor = 'black', backgroundColor = '' }: PolyLine) {
         requestAnimationFrame(() => {
-            if (this.context) {
-                this.context.beginPath();
-                this.context.fillStyle = backgroundColor;
-                this.context.strokeStyle = strokeColor;
-                this.context.lineWidth = lineWidth;
+            if (checkCanvasEntities(this.entities)) {
+                this.entities.context.beginPath();
+                this.entities.context.fillStyle = backgroundColor;
+                this.entities.context.strokeStyle = strokeColor;
+                this.entities.context.lineWidth = lineWidth;
 
-                this.context.moveTo(startPosition.x, startPosition.y);
+                this.entities.context.moveTo(startPosition.x, startPosition.y);
 
                 for (const { x, y } of lines) {
-                    this.context.lineTo(x, y);
+                    this.entities.context.lineTo(x, y);
                 }
 
                 if (backgroundColor) {
-                    this.context.fill();
+                    this.entities.context.fill();
                 }
 
-                this.context.stroke();
-                this.context.closePath();
+                this.entities.context.stroke();
+                this.entities.context.closePath();
             }
         });
     }
