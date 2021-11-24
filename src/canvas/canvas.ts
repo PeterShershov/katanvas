@@ -18,6 +18,7 @@ export class Canvas {
         this.canvasElement.height = height;
 
         this.context = this.canvasElement.getContext('2d', { alpha: false });
+
         parentElement.appendChild(this.canvasElement);
     }
 
