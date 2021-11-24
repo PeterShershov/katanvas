@@ -1,6 +1,6 @@
 export interface ShapeStyleProperties {
-    backgroundColor?: string;
-    strokeColor?: string;
+    backgroundColor?: string | CanvasGradient | CanvasPattern;
+    strokeColor?: string | CanvasGradient | CanvasPattern;
     lineWidth?: number;
 }
 
