@@ -62,12 +62,11 @@ export class Canvas {
                 this.context.fillStyle = backgroundColor;
                 this.context.lineWidth = lineWidth;
                 this.context.strokeStyle = strokeColor;
+                shape();
 
-                if (strokeColor && lineWidth) {
+                if (strokeColor || lineWidth) {
                     this.context.stroke();
                 }
-
-                shape();
 
                 this.context.fill();
                 this.context.closePath();
