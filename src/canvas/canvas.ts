@@ -10,13 +10,15 @@ export class Canvas {
         parentElement = document.body,
         width,
         height,
+        alpha = true,
     }: {
         parentElement?: HTMLElement;
         height: number;
         width: number;
+        alpha?: boolean;
     }): void {
         this.entities.element = document.createElement('canvas');
-        this.entities.context = this.entities.element.getContext('2d', { alpha: false });
+        this.entities.context = this.entities.element.getContext('2d', { alpha });
 
         this.entities.element.width = width;
         this.entities.element.height = height;
