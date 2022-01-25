@@ -1,6 +1,6 @@
 {
   "name": "katanvas",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "A simple abstraction for Canvas API",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -9,7 +9,9 @@
   "scripts": {
     "start": "parcel src/demo/index.html",
     "watch": "parcel watch",
-    "build": "parcel build"
+    "clean": "rimraf dist",
+    "parcel:build": "parcel build",
+    "build": "run-s clean parcel:build"
   },
   "keywords": [
     "canvas"
@@ -17,11 +19,13 @@
   "author": "Peter Shershov",
   "license": "MIT",
   "devDependencies": {
-    "@parcel/packager-ts": "^2.0.1",
-    "@parcel/transformer-typescript-types": "^2.0.1",
-    "eslint": "^8.3.0",
-    "parcel": "^2.0.1",
-    "prettier": "^2.4.1",
-    "typescript": "^4.5.2"
+    "@parcel/packager-ts": "^2.2.1",
+    "@parcel/transformer-typescript-types": "^2.2.1",
+    "eslint": "^8.7.0",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.2.1",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.5",
+    "rimraf": "^3.0.2"
   }
 }
