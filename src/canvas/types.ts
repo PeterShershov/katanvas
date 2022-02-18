@@ -1,3 +1,7 @@
+export interface Point {
+    x: number;
+    y: number;
+}
 export interface ShapeStyleProperties {
     backgroundColor?: string | CanvasGradient | CanvasPattern;
     strokeColor?: string | CanvasGradient | CanvasPattern;
@@ -19,12 +23,14 @@ export interface Rect extends ShapeStyleProperties {
     y: number;
 }
 
-export interface Point {
-    x: number;
-    y: number;
+export interface Line extends ShapeStyleProperties {
+    startPosition: Point;
+    endPosition: Point;
+    lineDash?: number[];
 }
 
 export interface PolyLine extends ShapeStyleProperties {
     startPosition: Point;
     lines: Point[];
+    lineDash?: number[];
 }
